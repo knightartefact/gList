@@ -173,16 +173,21 @@ Test(genericsTest, glist_front_success)
     cr_expect(*((int*)glist_front(list)) == 76);
 }
 
-// void *my_malloc(size_t size)
-// {
-//     return NULL;
-// }
+Test(genericsTest, glist_destroy_test)
+{
+    GList_t* list = glist_new(sizeof(float));
 
-// #define malloc(size) my_malloc(size)
-// Test(genericsTest, glist_list_failed_creation)
-// {
-//     GList_t *list = glist_new(sizeof(int));
+    float array[] = {32.56f, 57.25f, 5446.21f, 8921.8f};
+    for (int i = 0; i < 4; i++) {
+        glist_pushback(list, &array[i]);
+    }
+    glist_destroy(list);
+}
 
-//     cr_expect(list == NULL);
-// }
-// #undef malloc
+Test(genericsTest,  glist_destroy_fail_test)
+{
+    GList_t* list = NULL;
+
+    glist_destroy(list);
+}
+

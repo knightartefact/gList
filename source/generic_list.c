@@ -10,7 +10,7 @@
 #include <string.h>
 #include <stdio.h>
 
-GNode_t *create_node(size_t chunk_size, void *data)
+GNode_t *gnode_create(size_t chunk_size, void *data)
 {
     GNode_t *node = malloc(sizeof(GNode_t));
 
@@ -29,10 +29,16 @@ GNode_t *create_node(size_t chunk_size, void *data)
     return node;
 }
 
+void gnode_destroy(GNode_t **node)
+{
+    free((*node)->data);
+    free(*node);
+}
+
 GList_t* glist_new(size_t chunk_size)
 {
-    GNode_t* head = create_node(chunk_size, NULL);
-    GNode_t* tail = create_node(chunk_size, NULL);
+    GNode_t* head = gnode_create(chunk_size, NULL);
+    GNode_t* tail = gnode_create(chunk_size, NULL);
     GList_t* list = malloc(sizeof(GList_t));
 
     if (!list) {
@@ -49,6 +55,24 @@ GList_t* glist_new(size_t chunk_size)
     return list;
 }
 
+void glist_destroy(GList_t **list)
+{
+    GNode_t *current_node = NULL;
+    GNode_t *current_deleted_node = NULL;
+
+    if (!list)
+        return;
+    current_node = (*list)->head->next;
+    while (current_node && current_node != (*list)->tail) {
+        current_deleted_node = current_node;
+        current_node = current_node->next;
+        gnode_destroy(&current_deleted_node);
+    }
+    free((*list)->head);
+    free((*list)->tail);
+    free(*list);
+}
+
 size_t glist_size(GList_t *list)
 {
     return list->size;
@@ -56,7 +80,7 @@ size_t glist_size(GList_t *list)
 
 int glist_pushback(GList_t *list, void *elem)
 {
-    GNode_t *new_node = create_node(list->chunk_size, elem);
+    GNode_t *new_node = gnode_create(list->chunk_size, elem);
 
     new_node->prev = list->tail->prev;
     list->tail->prev->next = new_node;
@@ -121,4 +145,17 @@ void *glist_popfront(GList_t *list)
     list->head->next = first_node->next;
     list->size--;
     return data;
+}
+
+void glist_print(GList_t *list, void (*print_function)(void *))
+{
+    GNode_t *current = NULL;
+
+    if (!list)
+        return;
+    current = list->head->next;
+    while (current && current != list->tail) {
+        print_function(current->data);
+        current = current->next;
+    }
 }
