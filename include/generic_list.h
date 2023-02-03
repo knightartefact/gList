@@ -35,7 +35,8 @@ void *glist_popback(GList_t *list);
 void *glist_back(GList_t *list);
 void *glist_popfront(GList_t *list);
 void *glist_front(GList_t *list);
-void glist_print(GList_t *list, void(*print_function)(void *));
+void glist_print(GList_t *list, void(*print_function)(const void *));
+int glist_sort(GList_t *list, int(*comparator)(const void *, const void*));
 
 #ifdef HEADER_ONLY
     #include <stdlib.h>
@@ -179,7 +180,7 @@ void glist_print(GList_t *list, void(*print_function)(void *));
         return data;
     }
 
-    void glist_print(GList_t *list, void (*print_function)(void *))
+    void glist_print(GList_t *list, void (*print_function)(const void *))
     {
         GNode_t *current = NULL;
 
@@ -191,6 +192,36 @@ void glist_print(GList_t *list, void(*print_function)(void *));
             current = current->next;
         }
     }
+
+    static void _glist_swap_data(GNode_t *lhs, GNode_t *rhs)
+    {
+        void *temp_data = lhs->data;
+
+        lhs->data = rhs->data;
+        rhs->data = temp_data;
+    }
+
+    static bool _glist_sort_pass(GList_t *list, int(*comparator)(const void *lhs, const void *rhs))
+    {
+        bool swapped = false;
+        GNode_t* current = list->head->next;
+
+        while (current && current->next && current->next != list->tail) {
+            if (comparator(current->data, current->next->data) > 0) {
+                _glist_swap_data(current, current->next);
+                swapped = true;
+            }
+            current = current->next;
+        }
+        return swapped;
+    }
+
+    int glist_sort(GList_t *list, int(*comparator)(const void *, const void *))
+    {
+        while (_glist_sort_pass(list, comparator));
+        return 0;
+    }
+
     #endif //HEADER_ONLY
 
 #endif /* !GENERIC_LIST_H_ */

@@ -181,13 +181,34 @@ Test(genericsTest, glist_destroy_test)
     for (int i = 0; i < 4; i++) {
         glist_pushback(list, &array[i]);
     }
-    glist_destroy(list);
+    glist_destroy(&list);
 }
 
-Test(genericsTest,  glist_destroy_fail_test)
+static int _int_comparator(const void *lhs, const void *rhs)
 {
-    GList_t* list = NULL;
+    int int_lhs = *(int *)(lhs);
+    int int_rhs = *(int *)rhs;
+    return (int_lhs - int_rhs);
+}
 
-    glist_destroy(list);
+Test(genericsTest, glist_sort_int_test)
+{
+    GList_t *list = glist_new(sizeof(int));
+    int array[] = {45,54,8,6,75,2,7446,42,75,24,54,4};
+    int sorted_array[] = {2,4,6,8,24,42,45,54,54,75,75,7446};
+    size_t length = 12;
+
+    for (size_t i = 0; i < length; i++)
+    {
+        glist_pushback(list, &array[i]);
+    }
+    glist_sort(list, _int_comparator);
+
+    void *current = NULL;
+    while (list->size) {
+        current = glist_popback(list);
+        cr_expect(sorted_array[length - 1] == *(int *)current);
+        length--;
+    }
 }
 
