@@ -173,6 +173,11 @@ Test(genericsTest, glist_front_success)
     cr_expect(*((int*)glist_front(list)) == 76);
 }
 
+static void float_dtor(void *f)
+{
+    printf("used dtor: %f\n", *(float *)f);
+}
+
 Test(genericsTest, glist_destroy_test)
 {
     GList_t* list = glist_new(sizeof(float));
@@ -181,7 +186,7 @@ Test(genericsTest, glist_destroy_test)
     for (int i = 0; i < 4; i++) {
         glist_pushback(list, &array[i]);
     }
-    glist_destroy(&list);
+    glist_destroy(&list, float_dtor);
 }
 
 static int _int_comparator(const void *lhs, const void *rhs)

@@ -15,13 +15,15 @@ TESTOBJ	=	$(TESTSRC:.c=.o)
 
 LIB	=	libgencds.so
 
+STATIC_LIB	=	libgencds.a
+
 TEST	=	unit_tests
 
 CC	=	gcc
 
-LDFLAGS	=	-L. -lgencds -lcriterion
+LDFLAGS	=	-L. -lgencds
 
-CFLAGS	=	-Wall -Wextra --coverage
+CFLAGS	=	-Wall -Wextra
 
 CPPFLAGS	=	-Iinclude -fpic
 
@@ -34,6 +36,9 @@ $(LIB): CFLAGS += -shared
 $(LIB): $(LIBOBJ)
 	$(CC) -o $(LIB) $(LIBOBJ) $(CFLAGS)
 
+static: $(LIBOBJ)
+	ar -rc $(STATIC_LIB) $(LIBOBJ)
+
 clean:
 	$(RM) $(LIBOBJ) $(TESTOBJ)  */*.gcno */*.gcda
 
@@ -42,6 +47,8 @@ fclean: clean
 
 re: fclean all
 
+build_tests: CFLAGS += --coverage
+build_tests: LDFLAGS += -lcriterion
 build_tests: $(LIB) $(TESTOBJ)
 	$(CC) -o $(TEST) $(TESTOBJ) $(LDFLAGS) $(CFLAGS)
 

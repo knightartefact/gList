@@ -16,7 +16,7 @@ GNode_t *gnode_create(size_t chunk_size, void *data)
     GNode_t *node = malloc(sizeof(GNode_t));
 
     if (!node) {
-        printf("Couldn't allocate memory for new node\n");
+        perror("Couldn't allocate memory for new node");
         return NULL;
     }
     if (!data) {
@@ -24,6 +24,10 @@ GNode_t *gnode_create(size_t chunk_size, void *data)
         return node;
     }
     node->data = malloc(chunk_size);
+    if (!node->data) {
+        perror("Error allocating node data");
+        return NULL;
+    }
     memmove(node->data, data, chunk_size);
     node->next = NULL;
     node->prev = NULL;
@@ -43,6 +47,7 @@ GList_t* glist_new(size_t chunk_size)
     GList_t* list = malloc(sizeof(GList_t));
 
     if (!list) {
+        perror("Failed creating list");
         free(head);
         free(tail);
         return NULL;
@@ -56,18 +61,16 @@ GList_t* glist_new(size_t chunk_size)
     return list;
 }
 
-void glist_destroy(GList_t **list)
+void glist_destroy(GList_t **list, void(*dtor)(void *))
 {
-    GNode_t *current_node = NULL;
-    GNode_t *current_deleted_node = NULL;
+    void *current_data = NULL;
 
-    if (!list)
+    if (!(*list))
         return;
-    current_node = (*list)->head->next;
-    while (current_node && current_node != (*list)->tail) {
-        current_deleted_node = current_node;
-        current_node = current_node->next;
-        gnode_destroy(&current_deleted_node);
+    while ((*list)->size) {
+        current_data = glist_popback(*list);
+        dtor(current_data);
+        free(current_data);
     }
     free((*list)->head);
     free((*list)->tail);
@@ -92,25 +95,20 @@ int glist_pushback(GList_t *list, void *elem)
 
 void *glist_popback(GList_t *list)
 {
-    void *data = NULL;
-    GNode_t *last_node = NULL;
+    GNode_t *last_node = list->tail->prev;
+    void *data = last_node->data;;
 
-    if (!list->size) {
+    if (!list->size)
         return NULL;
-    }
     if (list->size == 1) {
-        last_node = list->tail->prev;
-        data = last_node->data;
         list->head->next = list->tail;
         list->tail->prev = list->head;
-        list->size--;
-        return data;
+    } else {
+        last_node->prev->next = list->tail;
+        list->tail->prev = last_node->prev;
     }
-    last_node = list->tail->prev;
-    data = last_node->data;
-    last_node->prev->next = list->tail;
-    list->tail->prev = last_node->prev;
     list->size--;
+    free(last_node);
     return data;
 }
 
@@ -126,25 +124,20 @@ void *glist_front(GList_t *list)
 
 void *glist_popfront(GList_t *list)
 {
-    void *data = NULL;
-    GNode_t *first_node = NULL;
+    GNode_t *first_node = list->head->next;
+    void *data = first_node->data;;
 
-    if (!list->size) {
+    if (!list->size)
         return NULL;
-    }
     if (list->size == 1) {
-        first_node = list->head->next;
-        data = first_node->data;
         list->head->next = list->tail;
         list->tail->prev = list->head;
-        list->size--;
-        return data;
+    } else {
+        first_node->next->prev = list->head;
+        list->head->next = first_node->next;
     }
-    first_node = list->head->next;
-    data = first_node->data;
-    first_node->next->prev = list->head;
-    list->head->next = first_node->next;
     list->size--;
+    free(first_node);
     return data;
 }
 
