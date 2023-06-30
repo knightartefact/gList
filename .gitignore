@@ -1,7 +1,7 @@
 *
 !*.c
 !*.h
-!Makefile
+!CMakeLists.txt
 !/include
 !/tests
 !/source
