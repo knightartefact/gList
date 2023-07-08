@@ -2,7 +2,8 @@
 !*.c
 !*.h
 !CMakeLists.txt
-!/include
-!/tests
-!/source
+!include/
+!tests/
+!tests/source
+!source/
 !.gitignore
