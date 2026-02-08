@@ -1,9 +1,2 @@
-*
-!*.c
-!*.h
-!CMakeLists.txt
-!include/
-!tests/
-!tests/source
-!source/
-!.gitignore
+build/
+.vscode/

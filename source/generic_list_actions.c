@@ -21,13 +21,13 @@ int glist_pushback(glist_t *list, void *elem)
     return 0;
 }
 
-void *glist_popback(glist_t *list)
+gnode_t *glist_popback(glist_t *list)
 {
-    gnode_t *last_node = list->tail->prev;
-    void *data = last_node->data;
+    gnode_t *last_node = glist_back(list);
 
-    if (!list->size)
+    if (!last_node) {
         return NULL;
+    }
     if (list->size == 1) {
         list->head->next = list->tail;
         list->tail->prev = list->head;
@@ -36,8 +36,7 @@ void *glist_popback(glist_t *list)
         list->tail->prev = last_node->prev;
     }
     list->size--;
-    free(last_node);
-    return data;
+    return last_node;
 }
 
 int glist_pushfront(glist_t *list, void *elem)
@@ -52,13 +51,13 @@ int glist_pushfront(glist_t *list, void *elem)
     return 0;
 }
 
-void *glist_popfront(glist_t *list)
+gnode_t *glist_popfront(glist_t *list)
 {
-    gnode_t *first_node = list->head->next;
-    void *data = first_node->data;
+    gnode_t *first_node = glist_front(list);
 
-    if (!list->size)
+    if (!first_node) {
         return NULL;
+    }
     if (list->size == 1) {
         list->head->next = list->tail;
         list->tail->prev = list->head;
@@ -67,6 +66,5 @@ void *glist_popfront(glist_t *list)
         list->head->next = first_node->next;
     }
     list->size--;
-    free(first_node);
-    return data;
+    return first_node;
 }
