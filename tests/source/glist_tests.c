@@ -215,17 +215,6 @@ Test(glist, destroy)
     glist_destroy(list, NULL);
 }
 
-Test(glist, destroy_no_destructor)
-{
-    glist_t* list = glist_new(sizeof(float));
-
-    float array[] = {32.56f, 57.25f, 5446.21f, 8921.8f};
-    for (int i = 0; i < 4; i++) {
-        glist_pushback(list, &array[i]);
-    }
-    glist_destroy(list, NULL);
-}
-
 Test(glist, destroy_no_list)
 {
     glist_destroy(NULL, NULL);
