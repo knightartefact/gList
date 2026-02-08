@@ -6,7 +6,6 @@
 */
 
 #include <criterion/criterion.h>
-#include <criterion/logging.h>
 #include <criterion/redirect.h>
 #include <sys/resource.h>
 #include <stdio.h>
@@ -23,6 +22,7 @@ Test(glist, create)
 {
     glist_t* list = glist_new(sizeof(int));
 
+    cr_assert(list != NULL, "Expected list to be not NULL");
     cr_expect(list->head != NULL, "Expected not NULL");
     cr_expect(list->tail != NULL, "Expected not NULL");
     cr_expect(list->head->next == list->tail, "Expected list.tail");
@@ -30,6 +30,7 @@ Test(glist, create)
     cr_expect(list->tail->next == NULL, "Expected NULL");
     cr_expect(list->tail->prev == list->head, "Expected list.head");
     cr_expect(list->chunk_size == sizeof(int), "Expected size: sizeof(int)");
+    glist_destroy(&list, NULL);
 }
 
 Test(glist, add_elems)
@@ -204,6 +205,14 @@ Test(glist, destroy_no_destructor)
     glist_destroy(&list, NULL);
 }
 
+Test(glist, destroy_no_list)
+{
+    glist_destroy(NULL, NULL);
+}
+
+// NOTE: Implement test where a destructor is used e.g:
+//       - A list of structures containing shared memory.
+
 static int _int_comparator(const void *lhs, const void *rhs)
 {
     int int_lhs = *(int *)(lhs);
@@ -230,5 +239,44 @@ Test(glist, sort_int)
         cr_expect(sorted_array[length - 1] == *(int *)current);
         length--;
     }
+}
+
+static void print_integer(const void *integer)
+{
+    int value = *(int *)integer;
+
+    printf("%d,", value);
+}
+
+Test(glist, print, .init=cr_redirect_stdout)
+{
+    glist_t *list = glist_new(sizeof(int));
+    int array[5] = {45, 124, 546, 42, 78};
+    int size = sizeof(array) / sizeof(array[0]);
+
+    for (int i = 0; i < size; i++) {
+        glist_pushback(list, &array[i]);
+    }
+    glist_print(list, print_integer);
+    fflush(stdout);
+    cr_assert_stdout_eq_str("45,124,546,42,78,");
+    glist_destroy(&list, NULL);
+}
+
+Test(glist, print_list_size_zero, .init=cr_redirect_stdout)
+{
+    glist_t *list = glist_new(sizeof(int));
+
+    glist_print(list, print_integer);
+    fflush(stdout);
+    cr_assert_stdout_eq_str("");
+    glist_destroy(&list, NULL);
+}
+
+Test(glist, print_no_list, .init=cr_redirect_stdout)
+{
+    glist_print(NULL, print_integer);
+    fflush(stdout);
+    cr_assert_stdout_eq_str("");
 }
 
