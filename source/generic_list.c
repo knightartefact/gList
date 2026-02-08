@@ -7,6 +7,8 @@
 
 #include "glist/glist.h"
 
+#include <stdio.h>
+
 size_t glist_size(glist_t *list)
 {
     return list->size;
@@ -24,13 +26,16 @@ gnode_t *glist_front(glist_t *list)
 
 void glist_print(glist_t *list, void (*print_function)(const void *))
 {
-    gnode_t *current = NULL;
-
-    if (!list || list->size <= 0)
-        return;
-    current = list->head->next;
+    if (!list || !print_function)
+       return;
+    gnode_t *current = glist_front(list);
+    printf("[");
     while (current && current != list->tail) {
         print_function(current->data);
+        if (current->next != list->tail) {
+            printf(", ");
+        }
         current = current->next;
     }
+    printf("]\n");
 }
