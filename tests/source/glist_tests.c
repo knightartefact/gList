@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "generic.h"
 #include <math.h>
+#include <time.h>
 
 void redirect_all()
 {
@@ -70,6 +71,26 @@ Test(glist, add_struct_elems)
     result = *(struct test *)glist_popback(list);
     cr_expect(result.a == 42);
     cr_expect_float_eq(result.b, 3.14f, 0.0001f);
+}
+
+Test(glist, pointers_to_elems)
+{
+    int *numbers[15] = {0};
+    glist_t *list = glist_new(sizeof(int *));
+    for (int i = 0; i < 15; i++) {
+        numbers[i] = malloc(sizeof(int));
+        *(numbers[i]) = i;
+        glist_pushback(list, &numbers[i]);
+    }
+    int i = 0;
+    gnode_t *node = glist_front(list);
+    for (; node && node->data; node = node->next) {
+        int *num = *(int **)node->data;
+        cr_expect(numbers[i] == num, "(PTR) Exepected: %d but got: %d", numbers[i], num);
+        cr_expect(*numbers[i] == *num, "(VAL) Exepected: %d but got: %d", *numbers[i], *num);
+        i++;
+    }
+    glist_destroy(&list, NULL);
 }
 
 Test(glist, pop_front)
