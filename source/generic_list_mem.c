@@ -25,6 +25,7 @@ gnode_t *gnode_create(size_t chunk_size, void *data)
     node->data = malloc(chunk_size);
     if (!node->data) {
         perror("Error allocating node data");
+        free(node);
         return NULL;
     }
     memmove(node->data, data, chunk_size);
