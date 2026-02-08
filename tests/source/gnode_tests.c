@@ -45,5 +45,5 @@ Test(gnode, destroy)
     int data = 42;
     gnode_t *node = gnode_create(sizeof(int), &data);
 
-    gnode_destroy(&node);
+    gnode_destroy(node);
 }

@@ -23,7 +23,7 @@ int glist_pushback(glist_t *list, void *elem)
 void *glist_popback(glist_t *list)
 {
     gnode_t *last_node = list->tail->prev;
-    void *data = last_node->data;;
+    void *data = last_node->data;
 
     if (!list->size)
         return NULL;

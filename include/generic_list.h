@@ -34,7 +34,7 @@ gnode_t* gnode_create(size_t chunk_size, void *data);
  * @brief Destroy a node.
  * @param node The node you want to destroy.
 */
-void gnode_destroy(gnode_t **node);
+void gnode_destroy(gnode_t *node);
 
 /**
  * @brief Create a new generic list based on chunk size.
@@ -50,7 +50,7 @@ glist_t* glist_new(size_t chunk_size);
  * @param dtor The destructor used on each element of the list.
  *             If this parameter is NULL, no destructor is used.
 */
-void glist_destroy(glist_t **list, void(*dtor)(void *));
+void glist_destroy(glist_t *list, void(*dtor)(void *));
 
 /**
  * @brief Get the size of the list.

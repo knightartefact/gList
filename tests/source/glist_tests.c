@@ -31,7 +31,7 @@ Test(glist, create)
     cr_expect(list->tail->next == NULL, "Expected NULL");
     cr_expect(list->tail->prev == list->head, "Expected list.head");
     cr_expect(list->chunk_size == sizeof(int), "Expected size: sizeof(int)");
-    glist_destroy(&list, NULL);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, add_elems)
@@ -90,7 +90,7 @@ Test(glist, pointers_to_elems)
         cr_expect(*numbers[i] == *num, "(VAL) Exepected: %d but got: %d", *numbers[i], *num);
         i++;
     }
-    glist_destroy(&list, NULL);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, pop_front)
@@ -212,7 +212,7 @@ Test(glist, destroy)
     for (int i = 0; i < 4; i++) {
         glist_pushback(list, &array[i]);
     }
-    glist_destroy(&list, NULL);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, destroy_no_destructor)
@@ -223,7 +223,7 @@ Test(glist, destroy_no_destructor)
     for (int i = 0; i < 4; i++) {
         glist_pushback(list, &array[i]);
     }
-    glist_destroy(&list, NULL);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, destroy_no_list)
@@ -281,7 +281,7 @@ Test(glist, print, .init=cr_redirect_stdout)
     glist_print(list, print_integer);
     fflush(stdout);
     cr_assert_stdout_eq_str("45,124,546,42,78,");
-    glist_destroy(&list, NULL);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, print_list_size_zero, .init=cr_redirect_stdout)
@@ -291,7 +291,7 @@ Test(glist, print_list_size_zero, .init=cr_redirect_stdout)
     glist_print(list, print_integer);
     fflush(stdout);
     cr_assert_stdout_eq_str("");
-    glist_destroy(&list, NULL);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, print_no_list, .init=cr_redirect_stdout)
