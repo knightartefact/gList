@@ -19,7 +19,7 @@ void redirect_all()
     cr_redirect_stdout();
 }
 
-Test(genericsTest, glist_create)
+Test(glist, create)
 {
     glist_t* list = glist_new(sizeof(int));
 
@@ -32,7 +32,7 @@ Test(genericsTest, glist_create)
     cr_expect(list->chunk_size == sizeof(int), "Expected size: sizeof(int)");
 }
 
-Test(genericsTest, glist_add_elems)
+Test(glist, add_elems)
 {
     glist_t* list = glist_new(sizeof(int));
     int nb = 45;
@@ -42,7 +42,7 @@ Test(genericsTest, glist_add_elems)
     cr_expect(*(int*)list->tail->prev->data == 45);
 }
 
-Test(genericsTest, glist_add_struct_elems)
+Test(glist, add_struct_elems)
 {
     struct test {
         int a;
@@ -71,7 +71,7 @@ Test(genericsTest, glist_add_struct_elems)
     cr_expect_float_eq(result.b, 3.14f, 0.0001f);
 }
 
-Test(genericsTest, glist_pop_front)
+Test(glist, pop_front)
 {
     glist_t *list = glist_new(sizeof(int));
     int array[5] = {45, 124, 546, 42, 78};
@@ -87,7 +87,7 @@ Test(genericsTest, glist_pop_front)
     }
 }
 
-Test(genericsTest, glist_pop_back)
+Test(glist, pop_back)
 {
     glist_t *list = glist_new(sizeof(int));
     int array[5] = {45, 124, 546, 42, 78};
@@ -103,7 +103,7 @@ Test(genericsTest, glist_pop_back)
     }
 }
 
-Test(genericsTest, glist_pop_back_too_far)
+Test(glist, pop_back_too_far)
 {
     glist_t *list = glist_new(sizeof(int));
     int array[5] = {45, 124, 546, 42, 78};
@@ -120,7 +120,7 @@ Test(genericsTest, glist_pop_back_too_far)
     cr_expect_(glist_popback(list) == NULL);
 }
 
-Test(genericsTest, glist_pop_front_too_far)
+Test(glist, pop_front_too_far)
 {
     glist_t *list = glist_new(sizeof(int));
     int array[5] = {45, 124, 546, 42, 78};
@@ -138,21 +138,21 @@ Test(genericsTest, glist_pop_front_too_far)
     cr_expect(glist_popfront(list) == NULL);
 }
 
-Test(genericsTest, glist_front_null)
+Test(glist, front_null)
 {
     glist_t *list = glist_new(sizeof(int));
 
     cr_expect(glist_front(list) == NULL);
 }
 
-Test(genericsTest, glist_back_null)
+Test(glist, back_null)
 {
     glist_t *list = glist_new(sizeof(int));
 
     cr_expect(glist_back(list) == NULL);
 }
 
-Test(genericsTest, glist_back_success)
+Test(glist, back_success)
 {
     glist_t *list = glist_new(sizeof(int));
     gnode_t *back_node = NULL;
@@ -167,7 +167,7 @@ Test(genericsTest, glist_back_success)
     cr_expect(*(int *)back_node->data == value, "Expected value: %d, but got %d", value, result);
 }
 
-Test(genericsTest, glist_front_success)
+Test(glist, front_success)
 {
     glist_t *list = glist_new(sizeof(int));
     gnode_t *front_node = NULL;
@@ -182,12 +182,7 @@ Test(genericsTest, glist_front_success)
     cr_expect(*(int *)front_node->data == value, "Expected value: %d, but got %d", value, result);
 }
 
-static void float_dtor(void *f)
-{
-    printf("used dtor: %f\n", *(float *)f);
-}
-
-Test(genericsTest, glist_destroy)
+Test(glist, destroy)
 {
     glist_t* list = glist_new(sizeof(float));
 
@@ -195,10 +190,10 @@ Test(genericsTest, glist_destroy)
     for (int i = 0; i < 4; i++) {
         glist_pushback(list, &array[i]);
     }
-    glist_destroy(&list, float_dtor);
+    glist_destroy(&list, NULL);
 }
 
-Test(genericsTest, glist_destroy_no_destructor)
+Test(glist, destroy_no_destructor)
 {
     glist_t* list = glist_new(sizeof(float));
 
@@ -216,7 +211,7 @@ static int _int_comparator(const void *lhs, const void *rhs)
     return (int_lhs - int_rhs);
 }
 
-Test(genericsTest, glist_sort_int)
+Test(glist, sort_int)
 {
     glist_t *list = glist_new(sizeof(int));
     int array[] = {45,54,8,6,75,2,7446,42,75,24,54,4};
