@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2023
-** GenericC-DS
+** gList
 ** File description:
 ** generic_list_sort
 */

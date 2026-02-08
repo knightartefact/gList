@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project("gencds")
+project("glist")
 
 add_compile_options(-Wall -Wextra)
 file(GLOB_RECURSE SRC_FILES source/*.c)
