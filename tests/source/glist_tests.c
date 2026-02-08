@@ -42,6 +42,7 @@ Test(glist, add_elems)
     glist_pushback(list, &nb);
     cr_expect(*(int*)list->head->next->data == 45);
     cr_expect(*(int*)list->tail->prev->data == 45);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, add_struct_elems)
@@ -71,6 +72,7 @@ Test(glist, add_struct_elems)
     result = *(struct test *)glist_popback(list);
     cr_expect(result.a == 42);
     cr_expect_float_eq(result.b, 3.14f, 0.0001f);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, pointers_to_elems)
@@ -107,6 +109,7 @@ Test(glist, pop_front)
         int result = *(int*)glist_popfront(list);
         cr_expect(result == array[i]);
     }
+    glist_destroy(list, NULL);
 }
 
 Test(glist, pop_back)
@@ -123,6 +126,7 @@ Test(glist, pop_back)
         int result = *(int*)glist_popback(list);
         cr_expect(result == array[4 - i]);
     }
+    glist_destroy(list, NULL);
 }
 
 Test(glist, pop_back_too_far)
@@ -140,6 +144,7 @@ Test(glist, pop_back_too_far)
     }
     cr_expect_(glist_popback(list) == NULL);
     cr_expect_(glist_popback(list) == NULL);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, pop_front_too_far)
@@ -158,6 +163,7 @@ Test(glist, pop_front_too_far)
     }
     cr_expect(glist_popfront(list) == NULL);
     cr_expect(glist_popfront(list) == NULL);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, front_null)
@@ -165,6 +171,8 @@ Test(glist, front_null)
     glist_t *list = glist_new(sizeof(int));
 
     cr_expect(glist_front(list) == NULL);
+    glist_destroy(list, NULL);
+
 }
 
 Test(glist, back_null)
@@ -172,6 +180,7 @@ Test(glist, back_null)
     glist_t *list = glist_new(sizeof(int));
 
     cr_expect(glist_back(list) == NULL);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, back_success)
@@ -187,6 +196,7 @@ Test(glist, back_success)
     cr_expect(back_node->data != NULL, "Expected data to be not NULL.");
     result = *(int *)back_node->data;
     cr_expect(*(int *)back_node->data == value, "Expected value: %d, but got %d", value, result);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, front_success)
@@ -202,6 +212,7 @@ Test(glist, front_success)
     cr_expect(front_node->data != NULL, "Expected data to be not NULL.");
     result = *(int *)front_node->data;
     cr_expect(*(int *)front_node->data == value, "Expected value: %d, but got %d", value, result);
+    glist_destroy(list, NULL);
 }
 
 Test(glist, destroy)
@@ -249,6 +260,7 @@ Test(glist, sort_int)
         cr_expect(sorted_array[length - 1] == *(int *)current);
         length--;
     }
+    glist_destroy(list, NULL);
 }
 
 static void print_integer(const void *integer)
