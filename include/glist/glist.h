@@ -121,12 +121,4 @@ void glist_print(glist_t *list, void(*print_function)(const void *));
 */
 int glist_sort(glist_t *list, int(*comparator)(const void *, const void*));
 
-/**
- * @brief Pop a node in the middle of the list
- * @param list The list you want to remove the element from.
- * @param node The element you want to remove.
- * @return Returns the data contained in the popped node or NULL if an error occurs.
-*/
-void *glist_popmid(glist_t *list, gnode_t *node);
-
 #endif /* !GLIST_H_ */
