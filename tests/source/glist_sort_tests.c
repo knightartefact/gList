@@ -12,6 +12,14 @@ static int _int_comparator(const void *lhs, const void *rhs)
     return (int_lhs - int_rhs);
 }
 
+Test(glist_sort, empty_list)
+{
+    glist_t *list = glist_new(sizeof(int));
+
+    glist_sort(list, _int_comparator);
+    glist_destroy(list, NULL);
+}
+
 Test(glist_sort, integer_list)
 {
     glist_t *list = glist_new(sizeof(int));

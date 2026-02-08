@@ -20,9 +20,9 @@ static void _glist_swap_data(gnode_t *lhs, gnode_t *rhs)
 static bool _glist_sort_pass(glist_t *list, int(*comparator)(const void *lhs, const void *rhs))
 {
     bool swapped = false;
-    gnode_t* current = list->head->next;
+    gnode_t* current = glist_front(list);
 
-    while (current && current->next && current->next != list->tail) {
+    while (current && current->next != list->tail) {
         if (comparator(current->data, current->next->data) > 0) {
             _glist_swap_data(current, current->next);
             swapped = true;
