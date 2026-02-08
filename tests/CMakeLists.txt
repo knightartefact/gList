@@ -3,12 +3,26 @@ project(glist_tests)
 
 include(CTest)
 
-file(GLOB_RECURSE SRC_FILES source/*_tests.c)
+set(SRC_FILES
+    source/glist_back_tests.c
+    source/glist_front_tests.c
+    source/glist_popback_tests.c
+    source/glist_popfront_tests.c
+    source/glist_print_tests.c
+    source/glist_pushback_tests.c
+    source/glist_pushfront_tests.c
+    source/glist_sort_tests.c
+    source/glist_tests.c
+)
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
-target_link_libraries(${PROJECT_NAME} criterion)
-target_link_libraries(${PROJECT_NAME} glist)
+target_compile_options(${PROJECT_NAME} PRIVATE -g3)
+
+target_link_libraries(${PROJECT_NAME}
+    criterion
+    glist
+)
 
 add_test(
     NAME ${PROJECT_NAME}

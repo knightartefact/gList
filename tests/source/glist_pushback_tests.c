@@ -8,8 +8,11 @@ Test(glist_pushback, one_element)
     int nb = 45;
 
     glist_pushback(list, &nb);
-    cr_expect(*(int*)list->head->next->data == 45);
-    cr_expect(*(int*)list->tail->prev->data == 45);
+    gnode_t *front = glist_front(list);
+    gnode_t *back = glist_back(list);
+    cr_expect(front == back);
+    cr_expect(*(int*)front->data == 45);
+    cr_expect(*(int*)back->data == 45);
     glist_destroy(list, NULL);
 }
 

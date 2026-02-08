@@ -22,7 +22,7 @@ static bool _glist_sort_pass(glist_t *list, int(*comparator)(const void *lhs, co
     bool swapped = false;
     gnode_t* current = glist_front(list);
 
-    while (current && current->next != list->tail) {
+    while (current && current->next) {
         if (comparator(current->data, current->next->data) > 0) {
             _glist_swap_data(current, current->next);
             swapped = true;

@@ -16,12 +16,12 @@ size_t glist_size(glist_t *list)
 
 gnode_t *glist_back(glist_t *list)
 {
-    return list->size ? list->tail->prev : NULL;
+    return list->size ? list->tail : NULL;
 }
 
 gnode_t *glist_front(glist_t *list)
 {
-    return list->size ? list->head->next : NULL;
+    return list->size ? list->head : NULL;
 }
 
 void glist_print(glist_t *list, void (*print_function)(const void *))
@@ -30,9 +30,9 @@ void glist_print(glist_t *list, void (*print_function)(const void *))
        return;
     gnode_t *current = glist_front(list);
     printf("[");
-    while (current && current != list->tail) {
+    while (current) {
         print_function(current->data);
-        if (current->next != list->tail) {
+        if (current != list->tail) {
             printf(", ");
         }
         current = current->next;

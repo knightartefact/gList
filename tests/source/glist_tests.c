@@ -18,14 +18,9 @@ Test(glist, create)
     glist_t* list = glist_new(sizeof(int));
 
     cr_assert(list != NULL, "Expected list to be not NULL");
-    cr_expect(list->head != NULL, "Expected not NULL");
-    cr_expect(list->tail != NULL, "Expected not NULL");
-    cr_expect(list->head->next == list->tail, "Expected list.tail");
-    cr_expect(list->head->prev == NULL, "Expected NULL");
-    cr_expect(list->tail->next == NULL, "Expected NULL");
-    cr_expect(list->tail->prev == list->head, "Expected list.head");
+    cr_expect(list->head == NULL, "Expected not NULL");
+    cr_expect(list->tail == NULL, "Expected not NULL");
     cr_expect(list->chunk_size == sizeof(int), "Expected size: sizeof(int)");
-
     glist_destroy(list, NULL);
 }
 

@@ -43,20 +43,14 @@ void gnode_destroy(gnode_t *node)
 
 glist_t* glist_new(size_t chunk_size)
 {
-    gnode_t* head = gnode_create(chunk_size, NULL);
-    gnode_t* tail = gnode_create(chunk_size, NULL);
     glist_t* list = malloc(sizeof(glist_t));
 
-    if (!list || !head || !tail) {
+    if (!list) {
         perror("Failed creating list");
-        gnode_destroy(head);
-        gnode_destroy(tail);
         return NULL;
     }
-    head->next = tail;
-    tail->prev = head;
-    list->head = head;
-    list->tail = tail;
+    list->head = NULL;
+    list->tail = NULL;
     list->size = 0;
     list->chunk_size = chunk_size;
     return list;
@@ -74,7 +68,5 @@ void glist_destroy(glist_t *list, void(*dtor)(void *))
             dtor(current_data);
         free(current_data);
     }
-    free(list->head);
-    free(list->tail);
     free(list);
 }

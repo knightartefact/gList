@@ -48,12 +48,17 @@ Test(glist_popback, too_far)
 {
     glist_t *list = glist_new(sizeof(int));
     int array[] = {45, 124, 546, 42, 78};
+    size_t array_size = sizeof(array) / sizeof(*array);
 
     for (int i = 0; i < 5; i++) {
         glist_pushback(list, &array[i]);
     }
+    int i = array_size - 1;
     while (glist_size(list)) {
-        cr_expect_(glist_popback(list) != NULL);
+        gnode_t *node = glist_popback(list);
+        int result = *(int *)node->data;
+        int ref = array[i--];
+        cr_expect(result == ref, "Expected: %d but got: %d", ref, result);
     }
     cr_expect_(glist_popback(list) == NULL);
     cr_expect_(glist_popback(list) == NULL);
