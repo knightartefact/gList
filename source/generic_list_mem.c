@@ -65,7 +65,7 @@ void glist_destroy(glist_t **list, void(*dtor)(void *))
 {
     void *current_data = NULL;
 
-    if (!(*list))
+    if (list == NULL || !(*list))
         return;
     while ((*list)->size) {
         current_data = glist_popback(*list);
