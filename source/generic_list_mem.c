@@ -58,15 +58,13 @@ glist_t* glist_new(size_t chunk_size)
 
 void glist_destroy(glist_t *list, void(*dtor)(void *))
 {
-    void *current_data = NULL;
-
     if (!list)
         return;
     while (glist_size(list)) {
-        current_data = glist_popback(list);
+        gnode_t *node = glist_popback(list);
         if (dtor)
-            dtor(current_data);
-        free(current_data);
+            dtor(node->data);
+        gnode_destroy(node);
     }
     free(list);
 }
