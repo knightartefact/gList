@@ -31,3 +31,19 @@ Test(genericNode, gnode_create_null_data)
     result = node->data;
     cr_expect(result == NULL, "Expected value to be NULL.");
 }
+
+Test(genericNode, gnode_create_data_fail)
+{
+    int data = 42;
+    gnode_t *node = gnode_create(100000000000, &data);
+
+    cr_assert(node == NULL, "Expected node to be NULL.");
+}
+
+Test(genericNode, destroy)
+{
+    int data = 42;
+    gnode_t *node = gnode_create(sizeof(int), &data);
+
+    gnode_destroy(&node);
+}
