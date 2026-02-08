@@ -25,6 +25,7 @@ Test(glist_pushback, multiple_elements)
         int data = *(int *)back->data;
         cr_expect(data == nbs[i]);
     }
+    cr_expect(glist_size(list) == array_size);
     glist_destroy(list, NULL);
 }
 

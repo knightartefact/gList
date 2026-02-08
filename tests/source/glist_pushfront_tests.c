@@ -25,6 +25,7 @@ Test(glist_pushfront, multiple_elements)
         int data = *(int *)front->data;
         cr_expect(data == nbs[i]);
     }
+    cr_expect(glist_size(list) == array_size);
     glist_destroy(list, NULL);
 }
 
