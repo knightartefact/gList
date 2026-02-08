@@ -5,8 +5,9 @@
 ** generic_list_mid
 */
 
+#include "glist/glist.h"
+
 #include <stdlib.h>
-#include "generic_list.h"
 
 void *glist_popmid(glist_t *list, gnode_t *node)
 {

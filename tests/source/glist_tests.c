@@ -5,11 +5,12 @@
 ** test
 */
 
+#include "glist/glist.h"
+
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include <sys/resource.h>
 #include <stdio.h>
-#include "generic.h"
 #include <math.h>
 #include <time.h>
 

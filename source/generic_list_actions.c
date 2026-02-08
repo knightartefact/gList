@@ -5,8 +5,9 @@
 ** generic_list_actions
 */
 
+#include "glist/glist.h"
+
 #include <stdlib.h>
-#include "generic_list.h"
 
 int glist_pushback(glist_t *list, void *elem)
 {

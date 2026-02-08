@@ -5,8 +5,9 @@
 ** generic_list_sort
 */
 
+#include "glist/glist.h"
+
 #include <stdbool.h>
-#include "generic_list.h"
 
 static void _glist_swap_data(gnode_t *lhs, gnode_t *rhs)
 {

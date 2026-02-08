@@ -5,7 +5,7 @@
 ** generic_list
 */
 
-#include "generic_list.h"
+#include "glist/glist.h"
 
 size_t glist_size(glist_t *list)
 {

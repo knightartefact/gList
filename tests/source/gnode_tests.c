@@ -5,10 +5,11 @@
 ** gnode_tests
 */
 
+#include "glist/glist.h"
+
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include <stdio.h>
-#include "generic_list.h"
 
 Test(gnode, create)
 {

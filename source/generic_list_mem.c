@@ -5,10 +5,11 @@
 ** generic_list_mem
 */
 
+#include "glist/glist.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "generic_list.h"
 
 gnode_t *gnode_create(size_t chunk_size, void *data)
 {
